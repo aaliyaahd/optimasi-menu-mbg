@@ -40,16 +40,6 @@ const menus = [
   },
 
   {
-    minggu: 1,
-    hariTanggal: "Sabtu, 04 April 2026",
-    menu: "Nasi Putih + Telur Ceplok Asam Manis + Stik Tempe + Mix Vege + Pisang",
-    hargaKecil: 8000,
-    hargaBesar: 10000,
-    giziKecil: 86,
-    giziBesar: 92
-  },
-
-  {
     minggu: 2,
     hariTanggal: "Senin, 06 April 2026",
     menu: "Nasi Putih + Ayam Crispy Saos Mentai + Tahu Asam Manis + Capcay + Pisang",
@@ -106,35 +96,41 @@ const menuTable = document.getElementById("menuTable");
 const variabelTable = document.getElementById("variabelTable");
 
 const mappingVariabel = {
-  "Senin-1": "X1",
-  "Senin-2": "X2",
-  "Senin-3": "X3",
-  "Senin-4": "X4",
+  "01 April 2026": "X9",
+  "02 April 2026": "X13",
+  "03 April 2026": "X18",
+  "04 April 2026": "X22",
 
-  "Selasa-1": "X5",
-  "Selasa-2": "X6",
-  "Selasa-3": "X7",
-  "Selasa-4": "X8",
+  "06 April 2026": "X1",
+  "07 April 2026": "X5",
+  "08 April 2026": "X10",
+  "09 April 2026": "X14",
+  "10 April 2026": "X19",
+  "11 April 2026": "X23",
 
-  "Rabu-1": "X9",
-  "Rabu-2": "X10",
-  "Rabu-3": "X11",
-  "Rabu-4": "X12",
+  "13 April 2026": "X2",
+  "14 April 2026": "X6",
+  "15 April 2026": "X11",
+  "16 April 2026": "X15",
+  "17 April 2026": "X20",
 
-  "Kamis-1": "X13",
-  "Kamis-2": "X14",
-  "Kamis-3": "X15",
-  "Kamis-4": "X16",
-  "Kamis-5": "X17",
+  "20 April 2026": "X3",
+  "21 April 2026": "X7",
+  "22 April 2026": "X12",
+  "23 April 2026": "X16",
+  "24 April 2026": "X21",
 
-  "Jumat-1": "X18",
-  "Jumat-2": "X19",
-  "Jumat-3": "X20",
-  "Jumat-4": "X21",
-
-  "Sabtu-1": "X22",
-  "Sabtu-2": "X23"
+  "27 April 2026": "X4",
+  "28 April 2026": "X8",
+  "30 April 2026": "X17"
 };
+
+function cariVariabel(item){
+  let tanggal =
+    item.hariTanggal.split(", ")[1];
+
+  return mappingVariabel[tanggal] || "-";
+}
 
 
 function ambilHari(namaHari){
@@ -176,7 +172,8 @@ function tampilkanTabel(){
 function tampilkanVariabel(){
   variabelTable.innerHTML = "";
 
-  menus.forEach(item=>{
+  menus.filter(item => cariVariabel(item) !== "-")
+     .forEach(item=>{
     variabelTable.innerHTML += `
       <tr>
         <td>${cariVariabel(item)}</td>
@@ -200,7 +197,9 @@ function optimasiMenu(){
       item.rasio = item.giziKecil/item.hargaKecil;
     });
   } else {
-    sortedMenus.forEach(item=>{
+    sortedMenus
+    .filter(item => cariVariabel(item) !== "-")
+    .forEach(item=>{
       item.rasio = item.giziBesar/item.hargaBesar;
     });
   }
