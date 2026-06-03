@@ -300,6 +300,9 @@ menus.forEach(item => {
   item.giziBesar = giziBesarMap[x];
 });
 
+console.log(menus);
+console.log(cariVariabel(menus[0]));
+
 const menuTable=document.getElementById("menuTable");
 const variabelTable=document.getElementById("variabelTable");
 
