@@ -303,6 +303,10 @@ menus.forEach(item => {
 const menuTable=document.getElementById("menuTable");
 const variabelTable=document.getElementById("variabelTable");
 
+console.log("menuTable =", menuTable);
+console.log("variabelTable =", variabelTable);
+console.log("jumlah menu =", menus.length);
+
 
 function tampilkanTabel(){
 menuTable.innerHTML="";
