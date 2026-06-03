@@ -1,4 +1,4 @@
-alert("SCRIPT JALAN");
+alert("Website Optimasi Menu MBG siap digunakan.");
 const menus = [
 
 {
