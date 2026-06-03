@@ -1,3 +1,4 @@
+alert("SCRIPT JALAN");
 const menus = [
 
 {
