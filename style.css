@@ -91,3 +91,23 @@ tr:nth-child(even){
   border-radius:8px;
   list-style:none;
 }
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:20px;
+  display:block;
+  overflow-x:auto;
+}
+
+td{
+  border:1px solid #ddd;
+  padding:10px;
+  text-align:left;
+  vertical-align:top;
+  word-wrap:break-word;
+}
+
+th{
+  min-width:120px;
+}
