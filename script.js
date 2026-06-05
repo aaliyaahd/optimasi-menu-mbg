@@ -349,24 +349,35 @@ variabelTable.innerHTML += `
 
 function optimasiMenu(){
 
-let kategori=document.getElementById("kategori").value;
+let kategori = document.getElementById("kategori").value;
 
-let sortedMenus=[...menus];
+let sortedMenus = [...menus];
 
-if(kategori==="kecil"){
-sortedMenus.forEach(item=>{
-item.rasio=item.giziKecil/item.hargaKecil;
-});
+/* hitung rasio */
+if(kategori === "kecil"){
+
+  sortedMenus.forEach(item=>{
+    item.rasio = item.giziKecil / item.hargaKecil;
+  });
+
 }else{
-sortedMenus.forEach(item=>{
-sortedMenus = sortedMenus.slice(0,6);
-item.rasio=item.giziBesar/item.hargaBesar;
-});
+
+  sortedMenus.forEach(item=>{
+    item.rasio = item.giziBesar / item.hargaBesar;
+  });
+
 }
 
-let hasil="<h3>Daftar 6 Menu Optimal</h3><ul>";
+/* urutkan dari rasio terbesar */
+sortedMenus.sort((a,b)=>b.rasio-a.rasio);
+
+/* ambil 6 menu terbaik */
+sortedMenus = sortedMenus.slice(0,6);
+
+let hasil = "<h3>Daftar 6 Menu Optimal</h3><ul>";
 
 sortedMenus.forEach((item,index)=>{
+
 hasil += `
 <li>
 <b>Peringkat ${index+1}</b><br>
@@ -377,11 +388,13 @@ ${item.hariTanggal}<br>
 <hr>
 </li>
 `;
+
 });
 
-hasil+="</ul>";
+hasil += "</ul>";
 
-document.getElementById("hasil").innerHTML=hasil;
+document.getElementById("hasil").innerHTML = hasil;
+
 }
 
 
