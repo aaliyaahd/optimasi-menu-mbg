@@ -359,6 +359,7 @@ item.rasio=item.giziKecil/item.hargaKecil;
 });
 }else{
 sortedMenus.forEach(item=>{
+sortedMenus = sortedMenus.slice(0,6);
 item.rasio=item.giziBesar/item.hargaBesar;
 });
 }
