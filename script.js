@@ -363,13 +363,12 @@ item.rasio=item.giziBesar/item.hargaBesar;
 });
 }
 
-sortedMenus.sort((a,b)=>b.rasio-a.rasio);
+let hasil="<h3>Daftar 6 Menu Optimal</h3><ul>";
 
-let hasil="<h3>Daftar Menu Optimal</h3><ul>";
-
-sortedMenus.forEach(item=>{
+sortedMenus.forEach((item,index)=>{
 hasil += `
 <li>
+<b>Peringkat ${index+1}</b><br>
 <b>${cariVariabel(item)}</b><br>
 ${item.hariTanggal}<br>
 🍽️ ${item.menu}<br>
