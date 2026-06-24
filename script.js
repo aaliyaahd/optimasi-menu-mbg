@@ -407,44 +407,128 @@ function optimasiMenu(){
 
 let kategori = document.getElementById("kategori").value;
 
-let sortedMenus = [...menus];
+let capacity = 48000;
 
-if(kategori === "kecil"){
+let n = menus.length;
 
-  sortedMenus.forEach(item=>{
-    item.rasio = item.giziKecil / item.hargaKecil;
-  });
+let dp = Array(n + 1).fill().map(() =>
+    Array(capacity + 1).fill(0)
+);
 
-}else{
+for(let i=1;i<=n;i++){
 
-  sortedMenus.forEach(item=>{
-    item.rasio = item.giziBesar / item.hargaBesar;
-  });
+    let item = menus[i-1];
+
+    let weight;
+    let profit;
+
+    if(kategori==="kecil"){
+        weight = item.hargaKecil;
+        profit = item.giziKecil;
+    }else{
+        weight = item.hargaBesar;
+        profit = item.giziBesar;
+    }
+
+    for(let w=0; w<=capacity; w++){
+
+        if(weight <= w){
+
+            dp[i][w] = Math.max(
+                dp[i-1][w],
+                dp[i-1][w-weight] + profit
+            );
+
+        }else{
+
+            dp[i][w] = dp[i-1][w];
+
+        }
+
+    }
 
 }
 
-sortedMenus.sort((a,b)=>b.rasio-a.rasio);
+let selectedMenus = [];
 
-sortedMenus = sortedMenus.slice(0,6);
+let w = capacity;
 
-let hasil = "<h3>Daftar 6 Menu Optimal</h3><ul>";
+for(let i=n; i>0; i--){
 
-sortedMenus.forEach((item,index)=>{
+    if(dp[i][w] != dp[i-1][w]){
 
-hasil += `
-<li>
-<b>Peringkat ${index+1}</b><br>
-<b>${cariVariabel(item)}</b><br>
-${item.hariTanggal}<br>
-🍽️ ${item.menu}<br>
-📈 Rasio: ${item.rasio.toFixed(4)}
-<hr>
-</li>
+        selectedMenus.push(menus[i-1]);
+
+        let weight =
+        kategori==="kecil"
+        ? menus[i-1].hargaKecil
+        : menus[i-1].hargaBesar;
+
+        w -= weight;
+
+    }
+
+}
+
+selectedMenus.reverse();
+
+let totalHarga = 0;
+let totalGizi = 0;
+
+let hasil = `
+<h3>Hasil Optimasi Knapsack</h3>
+<p><b>Kapasitas Anggaran:</b> Rp 48.000</p>
+<ul>
 `;
 
+selectedMenus.forEach((item,index)=>{
+
+    let harga =
+    kategori==="kecil"
+    ? item.hargaKecil
+    : item.hargaBesar;
+
+    let gizi =
+    kategori==="kecil"
+    ? item.giziKecil
+    : item.giziBesar;
+
+    totalHarga += harga;
+    totalGizi += gizi;
+
+    hasil += `
+    <li>
+    <b>Menu ${index+1}</b><br>
+    ${cariVariabel(item)}<br>
+    ${item.hariTanggal}<br>
+    🍽️ ${item.menu}<br>
+    💰 Harga: Rp ${harga.toLocaleString()}<br>
+    🥗 Gizi: ${gizi}
+    <hr>
+    </li>
+    `;
 });
 
-hasil += "</ul>";
+hasil += `
+</ul>
+
+<h3>Ringkasan</h3>
+
+<p>
+<b>Total Harga:</b>
+Rp ${totalHarga.toLocaleString()}
+</p>
+
+<p>
+<b>Total Gizi:</b>
+${totalGizi}
+</p>
+
+<p>
+<b>Nilai Optimal (Z):</b>
+${dp[n][capacity]}
+</p>
+`;
 
 document.getElementById("hasil").innerHTML = hasil;
 
