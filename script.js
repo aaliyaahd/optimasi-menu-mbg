@@ -407,7 +407,7 @@ function optimasiMenu(){
 
 let kategori = document.getElementById("kategori").value;
 
-let capacity = 48000;
+let capacity = kategori === "kecil" ? 48000 : 60000;
 
 let n = menus.length;
 
@@ -419,16 +419,15 @@ for(let i=1;i<=n;i++){
 
     let item = menus[i-1];
 
-    let weight;
-    let profit;
+    let weight =
+        kategori==="kecil"
+        ? item.hargaKecil
+        : item.hargaBesar;
 
-    if(kategori==="kecil"){
-        weight = item.hargaKecil;
-        profit = item.giziKecil;
-    }else{
-        weight = item.hargaBesar;
-        profit = item.giziBesar;
-    }
+    let profit =
+        kategori==="kecil"
+        ? item.giziKecil
+        : item.giziBesar;
 
     for(let w=0; w<=capacity; w++){
 
@@ -444,13 +443,10 @@ for(let i=1;i<=n;i++){
             dp[i][w] = dp[i-1][w];
 
         }
-
     }
-
 }
 
 let selectedMenus = [];
-
 let w = capacity;
 
 for(let i=n; i>0; i--){
@@ -460,14 +456,12 @@ for(let i=n; i>0; i--){
         selectedMenus.push(menus[i-1]);
 
         let weight =
-        kategori==="kecil"
-        ? menus[i-1].hargaKecil
-        : menus[i-1].hargaBesar;
+            kategori==="kecil"
+            ? menus[i-1].hargaKecil
+            : menus[i-1].hargaBesar;
 
         w -= weight;
-
     }
-
 }
 
 selectedMenus.reverse();
@@ -477,21 +471,21 @@ let totalGizi = 0;
 
 let hasil = `
 <h3>Hasil Optimasi Knapsack</h3>
-<p><b>Kapasitas Anggaran:</b> Rp 48.000</p>
+<p><b>Kapasitas Anggaran:</b> Rp ${capacity.toLocaleString()}</p>
 <ul>
 `;
 
 selectedMenus.forEach((item,index)=>{
 
     let harga =
-    kategori==="kecil"
-    ? item.hargaKecil
-    : item.hargaBesar;
+        kategori==="kecil"
+        ? item.hargaKecil
+        : item.hargaBesar;
 
     let gizi =
-    kategori==="kecil"
-    ? item.giziKecil
-    : item.giziBesar;
+        kategori==="kecil"
+        ? item.giziKecil
+        : item.giziBesar;
 
     totalHarga += harga;
     totalGizi += gizi;
@@ -499,7 +493,7 @@ selectedMenus.forEach((item,index)=>{
     hasil += `
     <li>
     <b>Menu ${index+1}</b><br>
-    ${cariVariabel(item)}<br>
+    <b>${cariVariabel(item)}</b><br>
     ${item.hariTanggal}<br>
     🍽️ ${item.menu}<br>
     💰 Harga: Rp ${harga.toLocaleString()}<br>
@@ -514,20 +508,11 @@ hasil += `
 
 <h3>Ringkasan</h3>
 
-<p>
-<b>Total Harga:</b>
-Rp ${totalHarga.toLocaleString()}
-</p>
+<p><b>Total Harga:</b> Rp ${totalHarga.toLocaleString()}</p>
 
-<p>
-<b>Total Gizi:</b>
-${totalGizi}
-</p>
+<p><b>Total Gizi:</b> ${totalGizi}</p>
 
-<p>
-<b>Nilai Optimal (Z):</b>
-${dp[n][capacity]}
-</p>
+<p><b>Nilai Optimal (Z):</b> ${dp[n][capacity]}</p>
 `;
 
 document.getElementById("hasil").innerHTML = hasil;
